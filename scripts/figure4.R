@@ -344,7 +344,7 @@ vs <- ggplot(tree_metadata_all_segments_df_family[grepl("V",gene_type)],
   theme_minimal(base_size = 34) + 
   facet_wrap(.~gene_type, nrow = 1, scales = "free") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        legend.position = 'top') + labs(x = "# Alleles", y = "# Families") + guides(fill = "none")
+        legend.position = 'top') + labs(x = "# Alleles", y = "# Subgroups") + guides(fill = "none")
 
 jd <- ggplot(tree_metadata_all_segments_df_family[!grepl("V",gene_type)], 
              aes(x = bin_size, fill = present_lab)) + 
@@ -355,7 +355,7 @@ jd <- ggplot(tree_metadata_all_segments_df_family[!grepl("V",gene_type)],
     name = ""
   ) +
   theme_minimal(base_size = 34) + facet_wrap(.~gene_type, nrow = 1, scales = "free") + guides(fill = "none")+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + labs(x = "# Alleles", y = "# Families")
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + labs(x = "# Alleles", y = "# Subgroups")
 
 p_allele_to_family <- wrap_elements(vs / jd)
 
@@ -376,7 +376,7 @@ asc_summary_all[, not_present_family := family - present_family] # Families not 
 # Reshape the data to long format for stacked barplot
 barplot_table <- data.table(
   gene_type = rep(asc_summary_all$gene_type, 4),
-  type = rep(c("Families", "Families", "ASCs", "ASCs"), each = nrow(asc_summary_all)),
+  type = rep(c("Subgroups", "Subgroups", "ASCs", "ASCs"), each = nrow(asc_summary_all)),
   presence = rep(c("In AIRR-seq","Not in AIRR-seq", "In AIRR-seq","Not in AIRR-seq"), each =  nrow(asc_summary_all)),
   count = c(
     asc_summary_all$present_family, asc_summary_all$family - asc_summary_all$present_family,

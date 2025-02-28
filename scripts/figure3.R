@@ -229,7 +229,7 @@ for(gene_type_ in c("IGHV","IGLV","IGKV")){
 p_bar <- ggplot(df_bar, aes(x=source, y=value, fill=present, pattern = remove)) +
   ggpattern::geom_bar_pattern(
     position="stack", stat="identity",
-    color = "white",
+    #color = "white",
     pattern_angle = 45
     ) +
   theme_minimal() +

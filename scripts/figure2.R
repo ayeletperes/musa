@@ -327,7 +327,7 @@ MUSA <- read.csv("MUSA/MUSA_with_rss_and_leader_and_asc_2025-02-05.csv")
 #Create a dataframe for alleles in the reference but not in in_repertior_df
 
 reference_df <- data.frame(
-  allele = MUSA[MUSA$novel == "FALSE","allele"],
+  allele = MUSA[MUSA$novel == "FALSE" & !grepl("_",MUSA$allele_seed_novel),"allele"],
   in_repertior = "FALSE",
   in_reference = "TRUE",
   in_genomic = "FALSE",
@@ -339,6 +339,8 @@ combined_df$in_reference <- combined_df$allele %in% as.character(all_reference_a
 
 df <- unique(combined_df[,c("allele", "in_repertior", "in_reference", "in_genomic")])
 
+# remove any novel alleles that are in the reference_df
+df[df$allele %in% MUSA[MUSA$novel == "FALSE" & grepl("_",MUSA$allele_seed_novel),'allele_seed_novel'],'in_reference'] <- 'TRUE'
 # Combine in_repertior_df and reference_df
 combined_with_references <- rbind(
   df, 
@@ -357,7 +359,7 @@ combined_with_references$in_genomic <- ifelse(combined_with_references$in_genomi
 
 venn_to_ggplot <- function(x, ...){
   grid.newpage()
-  venn_object <- venn.diagram(x, filename = NULL, ...)
+  venn_object <- venn.diagram(x, filename = NULL, disable.logging=TRUE, ...)
   grid.draw(venn_object)
   grob <- grid.grab()
   p <- ggplot() + 
@@ -429,7 +431,7 @@ legend_plot <- ggplot(data = data.frame(x = c(1,2,3), y = c(1,2,3),
   scale_color_manual(
     name = "",
     values = c("In Repertior" = personal_color , "In Reference" = "#2ECC71", "In Genomic" = gg_color),
-    labels = c("In Repertior" = "Expressed in cohort" , "In Reference" = "Baseline Reference" , "In Genomic" = "GG"), 
+    labels = c("In Repertior" = "Expressed in cohort" , "In Reference" = "Baseline Reference" , "In Genomic" = "GGS"), 
     guide = guide_legend(override.aes = list(size = 6), ncol = 3)
   ) +
   theme_void() +
