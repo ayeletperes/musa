@@ -1,9 +1,9 @@
-# Repertoire annotation and downstream analysis for the heavy chain R24 macaque sequences
+# VDJbase repertoire annotation and downstream analysis for the heavy chain R24 macaque sequences
 
 
-The nextflow pipeline performs annotations and downstream analysis of AIRR-seq.
+The nextflow pipeline performs anotation and downstrean analysis of AIRR-seq.
 
-The pipeline can be divided into eight main component:
+The pipeline can be devided into eight main componenet:
 
 **1. Initial repertoire alignment and annotation based reference set**
 
