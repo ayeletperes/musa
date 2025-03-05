@@ -19,7 +19,7 @@ MUSA (Macaque Unified Set of Alleles) is a repository for the alleles curated fr
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/musa.git
+git clone https://github.com/ayeletperes/musa.git
 cd musa
 ```
 
