@@ -26,7 +26,7 @@ df_macaque_subset <- df_macaque_subset[,.(
   IMGT = unique(imgt),
   Trios = unique(trios),
   Baseline = any(in_baseline_reference),
-  VRC = unique(vrc),
+  `Kong et al.` = unique(vrc),
   `Guo et al.` = unique(guo),
   Novel = unique(novel)
 ), by=.(allele,gene_type)]
@@ -79,12 +79,13 @@ df_macaque_subset <- unique(df_macaque_subset)
 df_macaque_subset[, in_database := present!="Not in cohort"]
 
 intersect_ = rev(c(
-  "Baseline",
+  # "Baseline", removed baseline in the review
   "KIMDB",
   "RhGLDb+",
   "IMGT",
   "Trios",
-  "VRC",
+  # "VRC", changed name in the review
+  "Kong et al.",
   "Guo et al.",
   "Novel"
 ))
@@ -125,7 +126,10 @@ df_bar <- rbind(df_bar[!(gene_type=="IGHD" & present=="Genomic Only" & source=="
 library(unikn)
 val_bar_fill <- setNames(hcl.colors(4, palette = "Sunset"), c("Both","Repertoire Only (Novel)","Genomic Only","Not in cohort"))
 
-val_bar_fill <- setNames(c("royalblue4","grey70","indianred","royalblue"), c("Both","Genomic Only","Not in cohort","Repertoire Only (Novel)"))
+# changed color in the review, The color for “Repertoire Only” is not different enough from “Both,”
+#val_bar_fill <- setNames(c("royalblue4","grey70","indianred","royalblue"), c("Both","Genomic Only","Not in cohort","Repertoire Only (Novel)"))
+
+val_bar_fill <- setNames(c("royalblue4","grey70","indianred","springgreen4"), c("Both","Genomic Only","Not in cohort","Repertoire Only (Novel)"))
 
 seecol(val_bar_fill)
 grays <- rep("gray90", 7)
@@ -257,7 +261,7 @@ p_all <- wrap_elements(
 )
 
 
-ggsave(p_all, filename = "figures/figure3.pdf", width = 14, height = 16, units = "in", dpi = 300)
+ggsave(p_all, filename = "figures/figure3_revised.pdf", width = 14, height = 16, units = "in", dpi = 300)
 
 for(gene_type_ in c("IGHD","IGHJ","IGLJ","IGKJ")){
     df <- df_macaque_subset[gene_type==gene_type_]
@@ -334,7 +338,8 @@ for(gene_type_ in c("IGHD","IGHJ","IGLJ","IGKJ")){
 p <- wrap_elements(
 Reduce(f='/', p_upset[c("IGHD","IGHJ","IGLJ","IGKJ")]) + plot_layout(ncol = 1)
 )
-ggsave(p, filename = "figures/figure3_supp.pdf", width = 14, height = 18, units = "in", dpi = 300)
+ggsave(p, filename = "figures/figure3_supp_revised.pdf", width = 14, height = 18, units = "in", dpi = 300)
+
 
 
 

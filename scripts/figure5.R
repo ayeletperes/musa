@@ -176,6 +176,7 @@ p_tiles_legend <- get_legend(p_tiles)
 p_tiles_final <- wrap_elements((p_tiles + guides(fill="none"))/ p_tiles_legend + plot_layout(heights = c(4, 0.5)))
 
 
+
 values = list(
   "1" = "#F8766D",
   "2" = "#C49A00","3" = "#53B400",

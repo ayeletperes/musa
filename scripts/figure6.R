@@ -32,7 +32,7 @@ rss_sequences_data[, rss_sequence := paste0(Heptamer, "NNN", Nonamer)]
 
 rss_sequences <- rss_sequences_data[,.(count=.N), by = .(rss_type, specie, rss_aligned, gene_type, Nonamer, Heptamer, Spacer, rss_sequence)]
 
-rss_sequences[,color:=ifelse(.N>1, "both", "single"), by = .(Nonamer, Heptamer, gene_type)]
+rss_sequences[,color:=ifelse(uniqueN(specie)>1, "both", "single"), by = .(Nonamer, Heptamer, gene_type)]
 
 rss_sequences_macaque <- rss_sequences[specie == "macaque",]
 
@@ -519,9 +519,10 @@ p_div <- p_div +
 
 heptamer_nonamer <- rss_sequences_macaque[,.(count = sum(count)), by=.(gene_type,rss_sequence)]
 
+library(tidyr)
 heptamer_nonamer_wider <- heptamer_nonamer %>% select(gene_type, rss_sequence) %>%
   dplyr::mutate(presence = TRUE) %>% # Add a column to indicate presence
-  pivot_wider(names_from = gene_type, values_from = presence, values_fill = FALSE)
+  tidyr::pivot_wider(names_from = gene_type, values_from = presence, values_fill = FALSE)
 
 data <- heptamer_nonamer_wider
 data2 <- heptamer_nonamer
@@ -545,7 +546,7 @@ p_upset <- upset_adapted_v2(heptamer_nonamer_wider, heptamer_nonamer,
                          base_annotations=list(
                            'Intersection\nsize'=intersection_size2(
                              counts=TRUE,
-                             mapping=aes(fill=rss_group),
+                             # mapping=aes(fill=rss_group),
                              text_colors = c("black","black"), text = list(size = 8)
                            )+theme(axis.text.y=element_text(size=32),
                                    axis.title.y = element_text(size=32),
@@ -564,12 +565,12 @@ BC
 
 p_rss <-  wrap_elements(wrap_plots(rss_by_gene_plot_list, ncol = 4) & theme(plot.margin = margin(0, 0, -10, 0, "lines")))
 
-combined_plot <- free(p_rss) + p_div + p_upset_leg + 
+combined_plot <- free(p_rss) + p_upset_leg + p_div + 
   plot_layout(heights = c(2, 1), 
-              widths = c(1,2), design = layout) +  # Adjust layout for alignment
+              widths = c(2,1), design = layout) +  # Adjust layout for alignment
   plot_annotation(tag_levels = 'A') &
   theme(plot.tag = element_text(size = 70))
 
 # Save the final combined plot
-ggsave("figures/figure6.pdf", combined_plot, width = 45, height = 45, 
+ggsave("figures/figure6_revised.pdf", combined_plot, width = 45, height = 45, 
        limitsize = FALSE, units = "in", dpi = 800)
